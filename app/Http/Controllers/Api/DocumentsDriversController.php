@@ -54,15 +54,7 @@ class DocumentsDriversController extends Controller
         $message = "Registrado correctamente";
         try{
             if($request->hasFile("urlpdf")){
-
                 $file = $request->file("urlpdf");
-
-               /* return response()->json([
-                    "request" => $file
-                ]);
-               */
-
-
                 $nameFile = $request->name .time() . ".".$file->guessExtension();
                 $route = public_path("pdf/documents_drivers/".$nameFile);
 
