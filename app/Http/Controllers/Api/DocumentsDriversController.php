@@ -51,34 +51,57 @@ class DocumentsDriversController extends Controller
         $data = [];
         $error = true; // Fail
         $message = "Registrado correctamente";
+        $code_error = 0; // OK
+        $files_exists = [];
         try{
-            if($request->hasFile("urlpdf")){
-                $file = $request->file("urlpdf");
-                $nameFile = $request->name .time() . ".".$file->guessExtension();
-                $route = public_path("pdf/documents_drivers/".$nameFile);
 
-                if($file->guessExtension() == 'pdf'){
-                    copy($file, $route);
-                    $obj = new documents_drivers();
-                    $obj->name = $file->getClientOriginalName();
-                    $obj->code = "code";
-                    $obj->url = $route;
-                    $obj->save();
+            $this->validate($request, [
+                'urlfiles' => 'required',
+                'urlfiles.*' => 'mimes:doc,pdf,docx'
+            ]);
+
+            if($request->hasFile("urlfiles")){
+                $files = $request->file("urlfiles");
+                foreach ($files as $file) {
+                    // Validar si el archivo ya se subió
+                    $fileDb = documents_drivers::where('name', '=' , $file->getClientOriginalName())->get();
+                    if($fileDb->count()){
+                        // existe
+                        $files_exists[] = $file->getClientOriginalName();
+                    } else {
+                        $nameFile = $file->getClientOriginalName();
+                        $route = public_path("pdf/documents_drivers/" . $nameFile);
+
+                        copy($file, $route);
+
+                        // Objeto a registrar
+                        $obj = new documents_drivers();
+                        $obj->name = $file->getClientOriginalName();
+                        $obj->url = $route;
+                        $obj->save();
+                    }
                     $error = false;
-                 } else {
-                    $message = "Por favor ingresa un archivo .PDF";
                 }
             } else {
                 $message = "Por favor agrege un archivo";
+                $code_error =-3;
+            }
+
+            // Se registraron documentos ya existentes
+            if(count($files_exists) > 0){
+                $code_error = -2;
             }
         } catch (\Exception $e){
             $message = $e->getMessage();
+            $code_error = -1;
         }
 
         return response()->json([
             'data' => $data,
             'error' => $error,
-            'message' => $message
+            'message' => $message,
+            'code_error' => $code_error,
+            'files_exists' => $files_exists
         ]);
     }
 

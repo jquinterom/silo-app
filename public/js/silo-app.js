@@ -4,9 +4,11 @@ $(document).ready(function () {
         let data = new FormData($(this)[0])
         let alertSuccess = $("#alert-success")
         let alertDanger = $("#alert-danger")
+        let alertWarning = $("#alert-warning")
 
         alertSuccess.attr("hidden", true)
         alertDanger.attr("hidden", true)
+        alertWarning.attr("hidden", true)
 
         $.ajax({
             url: "/api/save-document",
@@ -20,8 +22,20 @@ $(document).ready(function () {
                     alertDanger.html(result.message)
                     alertDanger.attr('hidden', false)
                 } else {
-                    alertSuccess.html(result.message)
-                    alertSuccess.attr('hidden', false)
+                    // Validamos el error de código
+                    if(result.code_error !== 0 ){
+                        let listDocumentsExists = "<ul>"
+                        result.files_exists.map(function (x){
+                            listDocumentsExists = listDocumentsExists +"<li>" + x + "</li>"
+                        })
+
+                        listDocumentsExists = listDocumentsExists + "</ul>"
+                        alertWarning.html("Los siguientes archivos ya fueron registrados: <br/>" + listDocumentsExists)
+                        alertWarning.attr('hidden', false)
+                    } else {
+                        alertSuccess.html(result.message)
+                        alertSuccess.attr('hidden', false)
+                    }
                 }
             }, error: function (error) {
                 alertDanger = $("#alert-danger")

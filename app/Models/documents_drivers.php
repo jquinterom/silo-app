@@ -11,5 +11,5 @@ class documents_drivers extends Model
 
     protected $table = "documents_drivers";
 
-    protected $fillable = ["name", "code", "url"];
+    protected $fillable = ["name", "url"];
 }

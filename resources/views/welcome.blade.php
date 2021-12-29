@@ -30,22 +30,45 @@
     <body class="antialiased">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <form action="#" method="post" enctype="multipart/form-data" id="formFile" >
-                        @csrf
-                        <input type="file" name="urlpdf" >
-                        <input type="submit" value="subir">
-                    </form>
-
-                </div>
-
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <div class="alert alert-success" role="alert" hidden="hidden" id="alert-success">
-                        A simple success alert—check it out!
                     </div>
 
                     <div class="alert alert-danger" role="alert" hidden="hidden" id="alert-danger">
                     </div>
+
+                    <div class="alert alert-warning" role="alert" hidden="hidden" id="alert-warning">
+                    </div>
+
+                    <form action="#" method="post" enctype="multipart/form-data" id="formFile" >
+                        @csrf
+                        <div class="mb-3">
+                            <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+                            <input class="form-control" type="file" id="formFileMultiple" multiple name="urlfiles[]">
+                        </div>
+                        <input type="submit" value="subir" class="btn btn-primary">
+                    </form>
+
+                    <br/>
+                    <hr>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre archivo</th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
