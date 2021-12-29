@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DocumentsDriversController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/all-documents', [\App\Http\Controllers\Api\DocumentsDriversController::class, 'index']);
+Route::get('/all-documents', [DocumentsDriversController::class, 'index']);
