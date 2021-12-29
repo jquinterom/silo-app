@@ -54,13 +54,13 @@ class DocumentsDriversController extends Controller
         $code_error = 0; // OK
         $files_exists = [];
         try{
-
-            $this->validate($request, [
-                'urlfiles' => 'required',
-                'urlfiles.*' => 'mimes:doc,pdf,docx'
-            ]);
-
             if($request->hasFile("urlfiles")){
+
+                $this->validate($request, [
+                    'urlfiles' => 'required',
+                    'urlfiles.*' => 'mimes:doc,pdf,docx'
+                ]);
+
                 $files = $request->file("urlfiles");
                 foreach ($files as $file) {
                     // Validar si el archivo ya se subió
