@@ -13,3 +13,9 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
+# DataGrip
+/datagrip/
+
+# PDF
+/public/pdf/
