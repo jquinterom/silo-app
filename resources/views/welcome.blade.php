@@ -31,14 +31,21 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
-
-                    <form action="{{ url('api/save-document') }}" method="post" enctype="multipart/form-data" >
+                    <form action="#" method="post" enctype="multipart/form-data" id="formFile" >
                         @csrf
                         <input type="file" name="urlpdf" >
                         <input type="submit" value="subir">
-                        <input type="button" value="subir" id="btnSend" class="btn btn-primary">
                     </form>
 
+                </div>
+
+                <div class="col-md-8">
+                    <div class="alert alert-success" role="alert" hidden="hidden" id="alert-success">
+                        A simple success alert—check it out!
+                    </div>
+
+                    <div class="alert alert-danger" role="alert" hidden="hidden" id="alert-danger">
+                    </div>
                 </div>
             </div>
         </div>

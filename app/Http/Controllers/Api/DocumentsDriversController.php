@@ -44,7 +44,6 @@ class DocumentsDriversController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Storedocuments_driversRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
