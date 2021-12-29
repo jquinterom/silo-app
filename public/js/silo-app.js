@@ -100,6 +100,10 @@ body.on('click', '.btnViewFile', function (){
 
 body.on('click', '.btnDeleteFile', function (){
 
+    alertSuccess.attr("hidden", true)
+    alertDanger.attr("hidden", true)
+    alertWarning.attr("hidden", true)
+
     let id = $(this).parents('tr')[0].getAttribute('id');
 
     let deleteDocument = confirm("¿Estas seguro que deseas eliminar este documento?");
