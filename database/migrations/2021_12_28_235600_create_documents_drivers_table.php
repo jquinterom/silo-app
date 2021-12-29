@@ -15,6 +15,8 @@ class CreateDocumentsDriversTable extends Migration
     {
         Schema::create('documents_drivers', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->default("")->nullable(false);
+            $table->string('url')->default("")->nullable(false);
             $table->timestamps();
         });
     }
