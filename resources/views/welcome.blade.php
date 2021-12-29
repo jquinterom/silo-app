@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>MASA</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
     <body class="antialiased">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-10">
+                <div class="card mt-4">
                     <div class="alert alert-success" role="alert" hidden="hidden" id="alert-success">
                     </div>
 
@@ -40,17 +40,30 @@
                     <div class="alert alert-warning" role="alert" hidden="hidden" id="alert-warning">
                     </div>
 
-                    <form action="#" method="post" enctype="multipart/form-data" id="formFile" >
-                        @csrf
-                        <div class="mb-3">
-                            <label for="formFileMultiple" class="form-label">Multiple files input example</label>
-                            <input class="form-control" type="file" id="formFileMultiple" multiple name="urlfiles[]">
-                        </div>
-                        <input type="submit" value="subir" class="btn btn-primary">
-                    </form>
+                    <div class="card-header">
+                        <h5>Registro de archivos para conductores</h5>
+                    </div>
 
+                    <div class="card-body">
+                        <form action="#" method="post" enctype="multipart/form-data" id="formFile" >
+                            @csrf
+                            <div class="mb-3">
+                                <label for="formFileMultiple" class="form-label">Por favor seleccione los archivos</label>
+                                <input class="form-control" type="file" id="formFileMultiple" multiple name="urlfiles[]">
+                            </div>
+                            <input type="submit" value="subir" class="btn btn-primary btn-lg">
+                        </form>
+
+                    </div>
+                </div>
+
+                <br/>
+
+
+                <div class="mt-4">
+                    <label for="table"> <b>Lista de documentos</b></label>
                     <br/>
-                    <hr>
+                    <br/>
 
                     <table class="table">
                         <thead>
@@ -68,7 +81,6 @@
                         </tr>
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
