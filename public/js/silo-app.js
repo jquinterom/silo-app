@@ -1,10 +1,13 @@
+let alertSuccess = $("#alert-success")
+let alertDanger = $("#alert-danger")
+let alertWarning = $("#alert-warning")
+
 $(document).ready(function () {
+
     $("#formFile").on("submit", function(e){
         e.preventDefault();
+
         let data = new FormData($(this)[0])
-        let alertSuccess = $("#alert-success")
-        let alertDanger = $("#alert-danger")
-        let alertWarning = $("#alert-warning")
 
         alertSuccess.attr("hidden", true)
         alertDanger.attr("hidden", true)
@@ -36,6 +39,8 @@ $(document).ready(function () {
                         alertSuccess.html(result.message)
                         alertSuccess.attr('hidden', false)
                     }
+
+                    loadAllDocuments()
                 }
             }, error: function (error) {
                 alertDanger = $("#alert-danger")
@@ -44,5 +49,45 @@ $(document).ready(function () {
             }
         });
     });
+
+    loadAllDocuments()
+
 })
+
+/**
+ * Cargar todos los documentos existentes en la base de datos
+ * */
+function loadAllDocuments(){
+    alertSuccess.attr("hidden", true)
+    alertDanger.attr("hidden", true)
+    alertWarning.attr("hidden", true)
+
+    $.ajax({
+        url: "/api/all-documents",
+        method: 'GET',
+        processData: false,
+        contentType: "application/json",
+        success: function (result) {
+            let tableBody = $("#tableBody")
+            let trs = ""
+            tableBody.html("")
+            if(result.error){
+                tableBody.append("<tr><td>Sin datos...</td></tr>")
+            } else {
+                result.data.map(function (x){
+                    trs = trs + "<tr>" +
+                        "<td>"+ x.id +"</td>"+
+                        "<td>"+ x.name +"</td>"+
+                        "<td><a href='#' class='bi-eye-fill' id='btnViewFile'></a> <a href='#'><span class='bi-trash-fill btn-outline-danger' id='btnDeleteFile'></span> </a></td>"+
+                        "</tr>"
+                })
+                tableBody.append(trs)
+            }
+        }, error: function (error) {
+            alertDanger = $("#alert-danger")
+            alertDanger.html(error)
+            alertDanger.attr('hidden', false)
+        }
+    });
+}
 
