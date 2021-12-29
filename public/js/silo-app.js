@@ -1,6 +1,7 @@
 let alertSuccess = $("#alert-success")
 let alertDanger = $("#alert-danger")
 let alertWarning = $("#alert-warning")
+let body = $("body")
 
 $(document).ready(function () {
 
@@ -21,6 +22,7 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (result) {
+
                 if(result.error){
                     alertDanger.html(result.message)
                     alertDanger.attr('hidden', false)
@@ -36,14 +38,16 @@ $(document).ready(function () {
                         alertWarning.html("Los siguientes archivos ya fueron registrados: <br/>" + listDocumentsExists)
                         alertWarning.attr('hidden', false)
                     } else {
-                        alertSuccess.html(result.message)
                         alertSuccess.attr('hidden', false)
+                        alertSuccess.html(result.message)
                     }
+
+                    console.log(alertSuccess)
+                    console.log(alertWarning)
 
                     loadAllDocuments()
                 }
             }, error: function (error) {
-                alertDanger = $("#alert-danger")
                 alertDanger.html(error)
                 alertDanger.attr('hidden', false)
             }
@@ -52,17 +56,13 @@ $(document).ready(function () {
 
     loadAllDocuments()
 
-
-
 })
 
 /**
  * Cargar todos los documentos existentes en la base de datos
  * */
 function loadAllDocuments(){
-    alertSuccess.attr("hidden", true)
     alertDanger.attr("hidden", true)
-    alertWarning.attr("hidden", true)
 
     $.ajax({
         url: "/api/documents",
@@ -77,18 +77,48 @@ function loadAllDocuments(){
                 tableBody.append("<tr><td>Sin datos...</td></tr>")
             } else {
                 result.data.map(function (x){
-                    trs = trs + "<tr>" +
+                    trs = trs + "<tr id='"+ x.id +"' name='"+ x.name +"'>" +
                         "<td>"+ x.id +"</td>"+
                         "<td>"+ x.name +"</td>"+
-                        "<td><a href='#' class='bi-eye-fill' id='btnViewFile'></a> <a href='#'><span class='bi-trash-fill btn-outline-danger' id='btnDeleteFile'></span> </a></td>"+
+                        "<td><a href='#' class='bi-eye-fill btnViewFile'></a> <a href='#'><span class='bi-trash-fill btn-outline-danger btnDeleteFile'></span> </a></td>"+
                         "</tr>"
                 })
                 tableBody.append(trs)
             }
         }, error: function (error) {
-            alertDanger = $("#alert-danger")
             alertDanger.html(error)
             alertDanger.attr('hidden', false)
         }
     });
 }
+
+body.on('click', '.btnViewFile', function (){
+    let url = "pdf/documents_drivers/" + $(this).parents('tr')[0].getAttribute('name')
+    window.open(url, '_blank')
+    return false
+})
+
+body.on('click', '.btnDeleteFile', function (){
+
+    let id = $(this).parents('tr')[0].getAttribute('id');
+
+    let deleteDocument = confirm("¿Estas seguro que deseas eliminar este documento?");
+    if (deleteDocument === true) {
+        const url = "api/documents/" + id
+
+        $.ajax({
+            url: url,
+            method: 'DELETE',
+            processData: false,
+            contentType: "application/json",
+            success: function (result) {
+                loadAllDocuments()
+                alertSuccess.html(result.message)
+                alertSuccess.attr("hidden", false)
+            }, error: function (error) {
+                alertDanger.html(error)
+                alertDanger.attr('hidden', false)
+            }
+        });
+    }
+})
