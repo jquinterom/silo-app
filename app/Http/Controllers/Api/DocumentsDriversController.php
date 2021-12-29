@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Storedocuments_driversRequest;
 use App\Http\Requests\Updatedocuments_driversRequest;
 use App\Models\documents_drivers;
 use Symfony\Component\HttpFoundation\Request;
@@ -132,10 +131,32 @@ class DocumentsDriversController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\documents_drivers  $documents_drivers
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(documents_drivers $documents_drivers)
+    public function destroy($id)
     {
-        //
+        $error = true; // Fail
+        $message = "Eliminado correctamente";
+        try {
+            $document = documents_drivers::where('id', '=', $id)->get();
+            if($document->count()){
+                $document = $document->first();
+
+                // eliminar el archivo PDF
+                \File::delete(public_path('/pdf/documents_drivers/'. $document->name));
+                $document->delete();
+                $error = false;
+            } else {
+                $message = "No existe el documento";
+            }
+
+        } catch (\Exception $e){
+            $message = $e->getMessage();
+        }
+
+        return response()->json([
+            'error' => $error,
+            'message' => $message,
+        ]);
     }
 }

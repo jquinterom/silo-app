@@ -14,7 +14,7 @@ $(document).ready(function () {
         alertWarning.attr("hidden", true)
 
         $.ajax({
-            url: "/api/save-document",
+            url: "/api/documents",
             method: 'POST',
             enctype: 'multipart/form-data',
             data: data,
@@ -52,6 +52,8 @@ $(document).ready(function () {
 
     loadAllDocuments()
 
+
+
 })
 
 /**
@@ -63,7 +65,7 @@ function loadAllDocuments(){
     alertWarning.attr("hidden", true)
 
     $.ajax({
-        url: "/api/all-documents",
+        url: "/api/documents",
         method: 'GET',
         processData: false,
         contentType: "application/json",
@@ -90,4 +92,3 @@ function loadAllDocuments(){
         }
     });
 }
-
