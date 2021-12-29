@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Storedocuments_driversRequest;
 use App\Http\Requests\Updatedocuments_driversRequest;
 use App\Models\documents_drivers;
+use Symfony\Component\HttpFoundation\Request;
 
 class DocumentsDriversController extends Controller
 {
@@ -22,8 +23,8 @@ class DocumentsDriversController extends Controller
         $data = [];
 
         try {
-            $documents = documents_drivers::all();
-            if($documents->count()){
+            $data = documents_drivers::all();
+            if($data->count()){
                 $error = false;
             } else {
                 $message = "No existen documentos";
@@ -44,11 +45,50 @@ class DocumentsDriversController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Storedocuments_driversRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Storedocuments_driversRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = [];
+        $error = true; // Fail
+        $message = "Registrado correctamente";
+        try{
+            if($request->hasFile("urlpdf")){
+
+                $file = $request->file("urlpdf");
+
+               /* return response()->json([
+                    "request" => $file
+                ]);
+               */
+
+
+                $nameFile = $request->name .time() . ".".$file->guessExtension();
+                $route = public_path("pdf/documents_drivers/".$nameFile);
+
+                if($file->guessExtension() == 'pdf'){
+                    copy($file, $route);
+                    $obj = new documents_drivers();
+                    $obj->name = $file->getClientOriginalName();
+                    $obj->code = "code";
+                    $obj->url = $route;
+                    $obj->save();
+                    $error = false;
+                 } else {
+                    $message = "Por favor ingresa un archivo .PDF";
+                }
+            } else {
+                $message = "Por favor agrege un archivo";
+            }
+        } catch (\Exception $e){
+            $message = $e->getMessage();
+        }
+
+        return response()->json([
+            'data' => $data,
+            'error' => $error,
+            'message' => $message
+        ]);
     }
 
     /**

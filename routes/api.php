@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('/all-documents', [DocumentsDriversController::class, 'index']);
+Route::post('/save-document', [DocumentsDriversController::class, 'store']);
