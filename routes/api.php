@@ -20,5 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/all-documents', [DocumentsDriversController::class, 'index']);
-Route::post('/save-document', [DocumentsDriversController::class, 'store']);
+Route::get('/documents', [DocumentsDriversController::class, 'index']);
+Route::post('/documents', [DocumentsDriversController::class, 'store']);
+Route::delete('/documents/{id}', [DocumentsDriversController::class, 'store']);
